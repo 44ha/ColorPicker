@@ -1,0 +1,116 @@
+<Window x:Class="ColorPicker.FloatingWidgetWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ChromaWidget"
+        Width="330"
+        SizeToContent="Height"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        ResizeMode="NoResize"
+        Focusable="False"
+        FontFamily="{StaticResource UiFont}">
+
+    <!--
+        The floating "lens" that follows the cursor while picking mode is active.
+
+        * transparent window shell (AllowsTransparency + Background=Transparent)
+          so only the rounded card is visible,
+        * ShowActivated=False so it never steals focus from the app under the
+          cursor (a focused window would swallow the very click we're waiting for),
+        * WS_EX_TRANSPARENT (applied in code-behind) so it is click-through: the
+          click always reaches the picking overlay underneath, never the widget,
+        * positioned in physical pixels through ScreenPlacement.PlaceNear.
+    -->
+    <Border Margin="8"
+            Padding="14"
+            CornerRadius="18"
+            Background="{StaticResource WidgetBgBrush}"
+            BorderBrush="#4D1D4ED8"
+            BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="24"
+                              Direction="270"
+                              ShadowDepth="6"
+                              Opacity="0.45"
+                              Color="#FF000000"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Magnifying lens: a nearest-neighbour zoom of the actual pixels
+                 under the cursor, so the exact pixel being picked is visible
+                 instead of being a single invisible dot on the screen. -->
+            <Border x:Name="LensBorder"
+                    Width="92" Height="92" CornerRadius="46"
+                    VerticalAlignment="Top"
+                    BorderBrush="#661D4ED8"
+                    BorderThickness="2"
+                    Background="#FF1D4ED8">
+                <Grid>
+                    <Ellipse Fill="#FF1D4ED8"/>
+                    <!-- Pixel data; NearestNeighbor keeps every screen pixel a
+                         hard-edged block instead of smearing it into a blur. -->
+                    <Image x:Name="Magnifier"
+                           Stretch="Fill"
+                           SnapsToDevicePixels="True"
+                           RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+
+                    <!-- Crosshair, dark copy first (offset 1 DIP) so the white
+                         one stays readable over light content as well. -->
+                    <Rectangle Height="1" Width="30" Fill="#66000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,1,0,-1"/>
+                    <Rectangle Width="1" Height="30" Fill="#66000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1,0,-1,0"/>
+                    <Rectangle Height="1" Width="30" Fill="#FFFFFFFF"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Rectangle Width="1" Height="30" Fill="#FFFFFFFF"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <!-- Outlines exactly one source pixel: the one the pick
+                         will read. Its size is set in code-behind from the zoom
+                         factor and the monitor DPI. -->
+                    <Rectangle x:Name="CenterPixel" Width="9" Height="9"
+                               Stroke="#FFFFFFFF" StrokeThickness="1"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Stacked converted values next to the lens -->
+            <StackPanel Grid.Column="1" Margin="14,1,0,0" VerticalAlignment="Center">
+                <TextBlock x:Name="HexValue"
+                           Text="#1D4ED8"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                <TextBlock x:Name="RgbValue"
+                           Text="29, 78, 216"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="12"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Margin="0,4,0,0"/>
+                <TextBlock x:Name="HslValue"
+                           Text="256°, 76%, 48%"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="12"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Margin="0,2,0,0"/>
+
+                <Border Height="1" Background="{StaticResource BorderSubtleBrush}" Margin="0,10,0,0"/>
+
+                <TextBlock Text="left-click to copy · right-click / Esc to cancel"
+                           FontSize="10.5"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Margin="0,8,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

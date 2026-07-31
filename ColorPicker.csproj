@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Chroma — Hex Code & Multi-Format Color Picker
+    ==================================================
+    A WPF desktop app that registers a system-wide hotkey (Ctrl+Shift+C) with
+    RegisterHotKey, enters "picking mode" by showing a transparent full-screen
+    overlay window (no SetWindowsHookEx / global input hooks — nothing that
+    trips keylogger heuristics), captures the pixel colour under the cursor and
+    converts it to HEX / RGB / RGBA / HSL / CMYK / raw HEX.
+
+    * net8.0-windows : .NET 8 (LTS) with the Windows Desktop (WPF) workload.
+    * app.manifest   : declares Per-Monitor-V2 DPI awareness so the coordinates
+                       we receive from the overlay and GetPixel are physical
+                       pixels on every monitor (essential for a pixel-accurate
+                       colour picker on mixed-DPI setups).
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>ColorPicker</RootNamespace>
+    <AssemblyName>ColorPicker</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyTitle>Chroma Color Picker</AssemblyTitle>
+    <Product>Chroma Color Picker</Product>
+    <Description>Global hotkey hex code &amp; multi-format color picker</Description>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+</Project>

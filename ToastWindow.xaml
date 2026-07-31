@@ -1,0 +1,61 @@
+<Window x:Class="ColorPicker.ToastWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ChromaToast"
+        Width="200"
+        SizeToContent="Height"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        ResizeMode="NoResize"
+        Focusable="False"
+        FontFamily="{StaticResource UiFont}">
+
+    <!--
+        Subtle "Copied!" notification shown briefly near the cursor right after a
+        successful pick. Fades in, holds, fades out and closes itself (see code-behind).
+    -->
+    <Border x:Name="Card"
+            Margin="8"
+            Padding="14,10"
+            CornerRadius="14"
+            Background="{StaticResource WidgetBgBrush}"
+            BorderBrush="#4D1D4ED8"
+            BorderThickness="1"
+            Opacity="0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20"
+                              Direction="270"
+                              ShadowDepth="5"
+                              Opacity="0.4"
+                              Color="#FF000000"/>
+        </Border.Effect>
+
+        <StackPanel Orientation="Horizontal">
+            <!-- Check glyph drawn with geometry (no font dependency) -->
+            <Path Data="M 1,6 L 5,10 L 13,2"
+                  Stroke="{StaticResource AccentBrush}"
+                  StrokeThickness="2.2"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  StrokeLineJoin="Round"
+                  VerticalAlignment="Center"/>
+
+            <StackPanel Margin="10,0,0,0">
+                <TextBlock Text="Copied!"
+                           FontSize="13.5"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                <TextBlock x:Name="HexText"
+                           Text="#1D4ED8"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="11"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           Margin="0,2,0,0"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>
